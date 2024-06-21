@@ -1,1 +1,1 @@
-Simple Rest Api For Students
+Simple Rest Api
