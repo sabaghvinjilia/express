@@ -1,18 +1,13 @@
-var express = require('express');
-var router = express.Router();
-var StudentService = require('../services/studentService');
+const express = require('express');
+const router = express.Router();
 
+const studentService = require('../services/studentService');
+const ApiSecurity = require('../middleware/apiSecurity');
 
-router.get('/all', (req, res) => {
-    return StudentService.findAll(req, res);
-});
-
-router.get('/:id', (req, res) => {
-    return StudentService.getOne(req, res);
-});
-
-router.post('/add', (req, res) => {
-    return StudentService.addStudent(req, res);
-});
+router.get('/all', ApiSecurity.requireLogin, studentService.getAll);
+router.get('/:id', ApiSecurity.requireLogin, studentService.getOne);
+router.post('/add', ApiSecurity.requirePermits('manage_student'), studentService.add);
+router.delete('/:id', ApiSecurity.requirePermits('manage_student'), studentService.delete);
+router.put('/:id', ApiSecurity.requirePermits('manage_student'), studentService.update);
 
 module.exports = router;
